@@ -19,6 +19,7 @@ from django.urls import path,include
 from django.conf.urls.static import static
 from django.conf import settings
 
+# نکته: می‌توانیم با استفاده از login_required و user_passes_test این مسیر را امن‌تر کنیم تا فقط ادمین به آن دسترسی داشته باشد، اما فعلاً برای سادگی از آن صرف نظر می‌کنیم.
 from django.contrib.auth.decorators import login_required
 import django_eventstream
 
