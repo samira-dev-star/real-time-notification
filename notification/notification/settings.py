@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.notif.NotifConfig',
+    'apps.notif.apps.NotifConfig',
     'django_eventstream',
 ]
 
