@@ -1,0 +1,58 @@
+<div id="notification-box" class="notification-box"></div>
+
+<style>
+    .notification-box {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #2c3e50;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        display: none; /* در ابتدا مخفی است */
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.5s;
+    }
+</style>
+
+<script>
+    // تابعی برای نمایش باکس
+    function showNotificationBox(message) {
+        const box = document.getElementById('notification-box');
+        box.textContent = message;
+        box.style.display = 'block';
+        
+        // fade in
+        setTimeout(() => { box.style.opacity = 1; }, 10); 
+
+        // پس از ۵ ثانیه باکس را محو و مخفی کن
+        setTimeout(() => {
+            box.style.opacity = 0;
+            setTimeout(() => { box.style.display = 'none'; }, 500);
+        }, 5000);
+    }
+
+    // بررسی اینکه کاربر ادمین است (یک مثال ساده)
+    // شما باید این بخش را با منطق خودتان تکمیل کنید. مثلا چک کنید کاربر در صفحه پنل ادمین است
+    const isAdminUser = {{ request.user.is_staff|yesno:"true,false" }};
+
+    if (isAdminUser) {
+        // اتصال به کانال رویدادهای ادمین
+        const eventSource = new EventSource('/admin-events/');
+
+        // وقتی یک پیام جدید از سرور می‌رسد
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            const message = data.text; // متنی که از سرور می‌فرستیم
+            
+            console.log('پیام جدید برای ادمین:', message);
+            showNotificationBox(message);
+        };
+
+        eventSource.onerror = function(err) {
+            console.error("EventSource failed:", err);
+        };
+    }
+</script>
