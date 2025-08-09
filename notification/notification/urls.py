@@ -26,7 +26,7 @@ import django_eventstream
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', include('notification.urls')),
+    path('', include('apps.account.urls',namespace='account')),
     # این مسیر فقط برای ادمین است تا به رویدادها گوش دهد
     path('admin-events/', include(django_eventstream.urls), {
         'channels': ['admin-notifications'] # نام کانال اختصاصی ادمین

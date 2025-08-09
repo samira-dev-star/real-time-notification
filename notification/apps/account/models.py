@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin,BaseUserManager
 
 class Customusermanager(BaseUserManager):
-    def create_user(self,mobile,name=""):
+    def create_user(self,mobile,name="",password=None):
         if not mobile:
             raise ValueError('please enter your mobile number!')
         user = self.model(
@@ -15,13 +15,16 @@ class Customusermanager(BaseUserManager):
             name = name
         )
         
+        user.set_password(password)
+        
         user.save(using = self._db)
         return user
     
-    def create_superuser(self,mobile,name):
+    def create_superuser(self,mobile,name,password):
         user = self.create_user(
             mobile=mobile,
-            name=name
+            name=name,
+            password=password,
             )
         user.is_superuser = True
         user.is_admin = True
